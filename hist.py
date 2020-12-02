@@ -1,7 +1,6 @@
 import numpy as np
 from astropy.io import fits
 import matplotlib.pyplot as plt
-#from matplotlib.colors import LogNorm
 from scipy.optimize import curve_fit
 
 hdulist = fits.open('A1_mosaic.fits')
