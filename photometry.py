@@ -1,5 +1,6 @@
 """
-finds the brightest pixel in various test data sets of 50x50 pixels and sums the pixel values within an aperture of 12 pixels
+find_max() finds the brightest pixel in various test data sets of 50x50 pixels and sums the pixel values within an aperture of 12 pixels
+square_aperture_flux() sums the pixels within a square aperture around the brightest pixel
 """
 import numpy as np
 
@@ -27,7 +28,7 @@ def find_max(data):
 #print(find_max(test1)) #returns False as expected
 #print(test2[find_max(test2)[0]][find_max(test2)[1]]) #prints max value
 
-def square_aperture_flux(data):
+def sqr_apt_flux(data):
     """
     adds pixel values within fixed distance from the brightest pixel in the source in the shape of a square
     """
@@ -39,9 +40,32 @@ def square_aperture_flux(data):
     end_index_x = find_max(data)[0]+int(0.5*apt_size+1)
     start_index_y = find_max(data)[1]-int(0.5*apt_size)
     end_index_y = find_max(data)[1]+int(0.5*apt_size+1)
-    print(start_index_x,end_index_x,start_index_y,end_index_y)
     apt_data = data[start_index_x:end_index_x,start_index_y:end_index_y] #slice the data array into the aperture square
     flux = np.sum(apt_data) #adds all the pixel values in the aperture square
     return(flux)
 
-print(square_aperture_flux(test2)) #returns (13*13) * 3419 +(50000-3419)= 624392 as expected
+#print(square_aperture_flux(test2)) #returns (13*13) * 3419 +(50000-3419)= 624392 as expected
+
+
+def circ_mask(data, centre, apt_size):
+    """
+    creates a circular mask of diameter apt_size around a given centre
+    """
+    indexy,indexx = np.ogrid[:len(data[0]),:len(data[1])]
+    r = np.sqrt((indexx - centre[0])**2 + (indexy-centre[1])**2)  #r is the distance between each pixel and the max value pixel
+    mask = r> apt_size*0.5 #creates mask which is False for pixels which are within the aperture 
+    return(mask)
+
+
+def circ_apt_flux(data):
+    """
+    adds pixel values within fixed distance from the brightest pixel in the source in the shape of a circle
+    """
+    centre=find_max(data)
+    apt_size = 12 #diameter of aperture is 12 pixels, 3"
+    masked_data= np.ma.array(data.tolist(), mask=circ_mask(data,centre,apt_size)) #masks data to a circular aperture about the max pixel
+    flux=np.sum(masked_data)
+    return flux
+
+
+#print(circ_apt_flux(test2)) #returns 386347
