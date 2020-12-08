@@ -14,11 +14,13 @@ data = hdulist[0].data
 
 hdulist.close()
 
-data = data[2250:4250, 500:2500]
+#data = data[2500:3500, 1000:2000]
 print(data)
 
-#detect objects by pixel value, min = mean + 4 std devs = 3467
-val_min = 3467
+#detect objects by pixel value, min = mean + 4 std devs = 3455
+noise_mean = 3419
+noise_std = 12
+val_min = noise_mean + 4 * noise_std
 val_max = 5400
 
 #function to give a circular mask dependent on radius
@@ -38,7 +40,7 @@ thresh = 20000
 #set up overall mask
 bright_points = data[data >= thresh]
 indices = np.nonzero(data >= thresh)
-current_mask = np.array(np.logical_or(data >= val_max, data <= val_min), dtype=bool)
+current_mask = np.array(data <= val_min, dtype=bool)
 print(len(bright_points))
 
 plt.figure(1)
@@ -47,12 +49,14 @@ plt.colorbar()
 ymin, ymax = plt.ylim()
 plt.ylim(ymax, ymin)
 
+bright_min = noise_mean + 2.5 * noise_std
+
 #find points around brightest point to exclude
 for i in range(len(bright_points)):
     coord = (indices[0][i], indices[1][i])
     brightness = data[coord[0], coord[1]]
     j = 0
-    while brightness >= val_min:
+    while brightness >= bright_min:
         if coord[1]+j == data.shape[0]:
             break
         else:
