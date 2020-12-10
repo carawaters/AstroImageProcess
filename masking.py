@@ -63,7 +63,7 @@ for i in range(len(bright_points)):
 cat_pts = data[np.logical_not(current_mask)] #mask True when excluding so need to remember what we need for current use
 cat_indices = np.nonzero(np.logical_not(current_mask))
 cat_mask = current_mask
-radius = 20 #Radius of area seen around point and of mask produced after catalogueing
+radius = 15 #Radius of area seen around point and of mask produced after catalogueing
 
 catalog = []
 
@@ -76,7 +76,8 @@ for a in range(len(cat_pts)):
         obj_mask = create_circular_mask(width, height, coord, radius)
         obj_pts = data*obj_mask #use mask as 1/0 to give only points within range of stars
         cent = np.unravel_index(np.argmax(obj_pts), obj_pts.shape)
-        catalog.append((cent[1], cent[0])) #indices reversed for plotting due to indexing being reversed
+        if cat_mask[cent] == False:
+            catalog.append((cent[1], cent[0])) #indices reversed for plotting due to indexing being reversed
         excl_mask = create_circular_mask(width, height, cent, radius)
         cat_mask = np.logical_or(cat_mask, excl_mask) #exclude points of object from being checked again
 
