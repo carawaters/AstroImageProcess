@@ -1,7 +1,6 @@
 import numpy as np
 from astropy.io import fits
 import matplotlib.pyplot as plt
-#from matplotlib.colors import LogNorm
 from scipy.optimize import curve_fit
 
 hdulist = fits.open('A1_mosaic.fits')
@@ -30,7 +29,7 @@ for i in range(1, len(bins)):
 popt, pcov = curve_fit(func, points, n, p0=[3410, 50, 700000])
 
 plt.plot(points, func(points, *popt), 'k', linewidth = 2, label = "Mean: " + str(int(round(popt[0], 0))) + " Std: " + str(int(round(popt[1], 0))))
-plt.xlim((3200, 3800))
+plt.xlim()
 plt.xlabel('Pixel Value')
 plt.ylabel('Count')
 plt.legend()
