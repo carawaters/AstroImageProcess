@@ -10,13 +10,9 @@ data = hdulist[0].data
 hdulist.close()
 data_small = data[1430:1500,1180:1230]
 
-"""
-plt.imshow(data_small, cmap = 'gray', norm=LogNorm())
-plt.colorbar()
-ymin, ymax = plt.ylim()
-plt.ylim(ymax, ymin)
-plt.show() #prints test section
-"""
+
+
+
 """
 #defining the test data sets
 test1=3419*np.ones((50,50)) #should not be able to find anything
@@ -26,7 +22,6 @@ test2[20][38] = 30000
 """
 
 sigma_max=3 #threshold number of standard deviations that the pixel value needs to be above the mean noise
-ann_size = 5 # difference in radii of the annulus circles
 
 def find_max(data_set):
     """
@@ -84,14 +79,14 @@ def circ_apt_flux(data_set,centre, apt_size):
     return flux, N
 
 
-def ann_ref(data_set, centre, apt_size):
+def ann_ref(data_set, centre, apt_size, ann_size):
     """
     finds the mean flux in counts/pixel in an annular reference about the brightest point of a source
     """
     #centre=find_max(data_set)
-    apt_mask = circ_mask(data_set, centre, 0.5*apt_size)
+    apt_mask = ~circ_mask(data_set, centre, 0.5*apt_size) #true inside aperture, false everywhere else
     sources_mask = data_set>=(3419+sigma_max*12) #masks pixels above the background range
-    ann_circ_mask = circ_mask(data_set, centre, 0.5*apt_size+ann_size)
+    ann_circ_mask = circ_mask(data_set, centre, 0.5*apt_size+ann_size) #true outside outer circle
     ann_mask1 = np.logical_or(ann_circ_mask,apt_mask) 
     ann_mask = np.logical_or(ann_mask1,sources_mask) #annulus mask is True outside outer circle and inside inner circle. False in between.
     masked_ann_data = np.ma.array(data_set.tolist(), mask=ann_mask)
@@ -100,9 +95,18 @@ def ann_ref(data_set, centre, apt_size):
 
 #print(ann_ref(test2))
 
-def flux(data_set, centre, apt_size):
+def flux(data_set, centre, apt_size, ann_size):
     """
     returns the source flux 
     """
     flux, N = circ_apt_flux(data_set, centre, apt_size)
-    return (flux - N*ann_ref(data_set, centre, apt_size))
+    return (flux - N*ann_ref(data_set, centre, apt_size, ann_size))
+
+"""
+mean,data_small_ref=ann_ref(data_small, find_max(data_small),12,5)
+plt.imshow(data_small_ref, cmap = 'gray', norm=LogNorm())
+plt.colorbar()
+ymin, ymax = plt.ylim()
+plt.ylim(ymax, ymin)
+plt.show() #prints test section
+"""
