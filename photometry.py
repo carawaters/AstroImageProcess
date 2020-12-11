@@ -26,7 +26,6 @@ test2[20][38] = 30000
 """
 
 sigma_max=3 #threshold number of standard deviations that the pixel value needs to be above the mean noise
-apt_size = 12  #diameter of aperture is 12 pixels, 3"
 ann_size = 5 # difference in radii of the annulus circles
 
 def find_max(data_set):
@@ -43,7 +42,7 @@ def find_max(data_set):
         return False #if there is no source with brightness above the background threshold
 
 
-def sqr_apt_flux(data_set):
+def sqr_apt_flux(data_set, apt_size):
     """
     adds pixel values within fixed distance from the brightest pixel in the source in the shape of a square
     """
@@ -70,7 +69,7 @@ def circ_mask(data_set, centre, radius):
     return mask
 
 
-def circ_apt_flux(data_set,centre):
+def circ_apt_flux(data_set,centre, apt_size):
     """
     adds pixel values within fixed distance from the brightest pixel in the source in the shape of a circle. 
     returns the total flux and the number of pixels inside the aperture.
@@ -85,7 +84,7 @@ def circ_apt_flux(data_set,centre):
     return flux, N
 
 
-def ann_ref(data_set, centre):
+def ann_ref(data_set, centre, apt_size):
     """
     finds the mean flux in counts/pixel in an annular reference about the brightest point of a source
     """
@@ -101,10 +100,9 @@ def ann_ref(data_set, centre):
 
 #print(ann_ref(test2))
 
-def flux(data_set, centre):
+def flux(data_set, centre, apt_size):
     """
     returns the source flux 
     """
-    flux, N = circ_apt_flux(data_set, centre)
-    return (flux - N*ann_ref(data_set, centre))
-
+    flux, N = circ_apt_flux(data_set, centre, apt_size)
+    return (flux - N*ann_ref(data_set, centre, apt_size))
