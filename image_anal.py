@@ -59,7 +59,7 @@ for k in range(3,5,1):
 
     catalogue = [index_x, index_y, tot_flux, err_tot_flux, source_flux, loc_backgrnd, mag]
     zip(*catalogue)
-    np.savetxt("catalogue.csv",catalogue_anal,fmt='%.18e')
+    np.savetxt("catalogue.csv",catalogue,fmt='%.18e')
     """
     with open("catalogue.csv","w") as f:
         wr = csv.writer(f)
@@ -88,4 +88,4 @@ plt.legend()
 plt.grid()
 plt.show()
 
-print(np.argwhere(np.isnan(catalogue_anal)))
+print(np.argwhere(np.isnan(catalogue)))
