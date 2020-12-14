@@ -6,7 +6,7 @@ hdulist = fits.open('A1_mosaic.fits')
 
 header = hdulist[0].header
 data_raw = hdulist[0].data
-data = data_raw[2500:3500,1000:2000]
+data = data_raw[5:, : ]
 
 hdulist.close()
 
@@ -21,7 +21,7 @@ points=[pointsx,pointsy]
 
 #find these for every point
 
-for k in range(3,5,1):
+for k in range(3,16,2):
     ann_size= k
     apt_size = 12
 
@@ -37,15 +37,15 @@ for k in range(3,5,1):
         x=int(pointsx[i])
         y=int(pointsy[i])
         #print(data[y][x])
-
-        if x > 25.0 and y > 25.0 and y<len(data)-25.0 and x<len(data[0])-25.0:
         #slice a section of the total image around each source to carry out flux analysis. For this, the point cannot lie too close to the edge.
-
-            index_x.append(x)
-            index_y.append(y)
         
-            data_set = data[int(y-25):int(y+25),int(x-25):int(x+25)] 
-            centre=np.array([25,25]) #the centre is fixed due to the sliced section
+        if x >15 and y>15 and x<(len(data[0])-15) and y<(len(data)-15):
+        #if x >k and y>k and x<(len(data[0])-k) and y<(len(data)-k):
+            index_y.append(y)
+            index_x.append(x)
+            data_set = data[int(y-15):int(y+15),int(x-15):int(x+15)]
+            centre=np.array([14.0,14.0]) #the centre is fixed due to the sliced section
+
             i_tot_flux, N = circ_apt_flux(data_set,centre, apt_size)
             tot_flux.append(i_tot_flux) #find individual total flux
             i_err_tot_flux = np.sqrt(i_tot_flux)
@@ -76,14 +76,14 @@ for k in range(3,5,1):
     N=np.array(N)
     plt.plot(m,np.log10(N), label = "Ann size = "+str(ann_size))
 
+def func(x):
+    return 0.6*x
 
-
-
-
+#plt.plot(m,func(m))
 plt.xlabel("m")
 plt.ylabel("log(N)")
-plt.ylim(0,3.5)
-plt.xlim(7.5,25)
+#plt.ylim(0,3.5)
+#plt.xlim(7.5,25)
 plt.legend()
 plt.grid()
 plt.show()
