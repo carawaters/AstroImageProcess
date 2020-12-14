@@ -13,7 +13,7 @@ hdulist.close()
 from photometry import circ_apt_flux,ann_ref,flux
 import matplotlib.pyplot as plt
 
-pointsx, pointsy=np.loadtxt("catalog.csv", delimiter=",", unpack = True)
+pointsx, pointsy=np.loadtxt("points.csv", delimiter=",", unpack = True)
 points=[pointsx,pointsy]
 
 #lists which will contain the values in the catalogue
@@ -21,7 +21,7 @@ points=[pointsx,pointsy]
 
 #find these for every point
 
-for k in range(3,16,2):
+for k in range(3,5,1):
     ann_size= k
     apt_size = 12
 
@@ -57,11 +57,14 @@ for k in range(3,16,2):
             i_mag = header["MAGZPT"] -2.5*np.log10(i_source_flux)
             mag.append(i_mag) #individual apparent magnitude
 
-    catalogue_anal = [index_x, index_y, tot_flux, err_tot_flux, source_flux, loc_backgrnd, mag]
-    with open("catalogue_anal.csv","w") as f:
+    catalogue = [index_x, index_y, tot_flux, err_tot_flux, source_flux, loc_backgrnd, mag]
+    zip(*catalogue)
+    np.savetxt("catalogue.csv",catalogue_anal,fmt='%.18e')
+    """
+    with open("catalogue.csv","w") as f:
         wr = csv.writer(f)
-        wr.writerows(catalogue_anal) #this saves a csv file with each row being one of the lists inside the catalogue
-
+        wr.writerows(catalogue) #this saves a csv file with each row being one of the lists inside the catalogue
+    """
 
     N = []
     for j in range(0,2500):
@@ -84,3 +87,5 @@ plt.xlim(7.5,25)
 plt.legend()
 plt.grid()
 plt.show()
+
+print(np.argwhere(np.isnan(catalogue_anal)))
