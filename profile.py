@@ -15,8 +15,8 @@ def int_radius(data, cent, val_min):
     #finding max radius for calculating intensity
     while val >= val_min:
         #need to make sure we don't include multiple objects
-        if rad >= 7:
-            break
+        #if rad >= 7:
+            #break
         val = data[cent[0], cent[1]+rad]
         rad += 1
     intensity = []
