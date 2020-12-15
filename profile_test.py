@@ -1,3 +1,6 @@
+"""
+Calculates the Sersic index for every point identified
+"""
 from profile import int_radius, sersic_index
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,22 +21,19 @@ points = np.genfromtxt('points.csv', delimiter=',')
 
 sersic_indices = []
 
-num = 1
-
+#loop through each point and fit to find sersic index
 for point in points:
-    print(num)
     cent = (int(point[0]), int(point[1]))
-    print(cent)
+    #check not too close to edge so excluding noise
     if cent[0] >= len(data[1])-edge_noise or cent[0] <= edge_noise or cent[1] >= len(data[0])-edge_noise or cent[1] <= edge_noise:
         sersic_indices.append(np.NaN)
     else:
         intensity = int_radius(data, cent, val_min)
+        #radius must be >= 3 to give enough points to plot
         if len(intensity) <= 3:
             sersic_indices.append(np.NaN)
         else:
-            print(intensity)
             n, k = sersic_index(intensity)
             sersic_indices.append(n)
-    num += 1
 
 np.savetxt('sersic_indices.csv', np.array(sersic_indices), delimiter=',')

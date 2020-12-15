@@ -1,3 +1,6 @@
+"""
+Contains functions for finding the intensity at a range of radii and the Sersic index of an object
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
@@ -9,15 +12,19 @@ def int_radius(data, cent, val_min):
     """
     val = data[cent]
     rad = 0
+    #finding max radius for calculating intensity
     while val >= val_min:
+        #need to make sure we don't include multiple objects
         if rad >= 7:
             break
         val = data[cent[0], cent[1]+rad]
         rad += 1
     intensity = []
+    #find intensity within circle of each radius
     for r in range(1, rad+1):
-        flux, _ = circ_apt_flux(data, cent, r*2)
-        I_r = flux/(np.pi*(r**2))
+        flux, N = circ_apt_flux(data, cent, r*2)
+        print(N)
+        I_r = flux/N
         intensity.append(I_r)
     return np.array(intensity)
 
@@ -33,6 +40,7 @@ def sersic_index(intensity):
     """
     radius = np.array(range(0, len(intensity)))
     I_0 = intensity[0]
+    #lambda function to make I_0 a fixed value as we already know it
     popt, pcov = curve_fit(lambda radius, k, n: sersic(radius, I_0, k, n), radius, np.log(intensity), p0=[0.5, 5])
     n = popt[1]
     k = popt[0]

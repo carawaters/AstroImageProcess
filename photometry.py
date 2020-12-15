@@ -75,7 +75,7 @@ def circ_apt_flux(data_set,centre, apt_size):
     apt_mask=circ_mask(data_set, centre, apt_size*0.5)
     masked_data = np.ma.array(data_set.tolist(), mask=apt_mask) #masks data to a circular aperture about the max pixel
     flux = masked_data.sum()
-    N=np.count_nonzero(masked_data) - np.sum(apt_mask)
+    N=len(data_set)*len(data_set[0]) - np.sum(apt_mask)
     return flux, N
 
 
