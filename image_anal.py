@@ -21,8 +21,8 @@ points=[pointsx,pointsy]
 
 #find these for every point
 
-for k in range(3,16,2):
-    ann_size= k
+for k in range(60,201,20):
+    ann_size= 5
     apt_size = 12
 
     tot_flux=[] #total flux through circular aperture
@@ -39,8 +39,8 @@ for k in range(3,16,2):
         #print(data[y][x])
         #slice a section of the total image around each source to carry out flux analysis. For this, the point cannot lie too close to the edge.
         
-        if x >15 and y>15 and x<(len(data[0])-15) and y<(len(data)-15):
-        #if x >k and y>k and x<(len(data[0])-k) and y<(len(data)-k):
+        #if x >50 and y>50 and x<(len(data[0])-50) and y<(len(data)-50):
+        if x >k and y>k and x<(len(data[0])-k) and y<(len(data)-k):
             index_y.append(y)
             index_x.append(x)
             data_set = data[int(y-15):int(y+15),int(x-15):int(x+15)]
@@ -74,7 +74,7 @@ for k in range(3,16,2):
     m = np.arange(0,25, 0.01)
     m2= np.arange(13.5,18,0.1)
     N=np.array(N)
-    plt.plot(m,np.log10(N), label = "Ann size = "+str(ann_size))
+    plt.plot(m,np.log10(N), label = "Edge thickness = "+str(k))
 
 def func(x):
     return 0.6*x
