@@ -54,7 +54,6 @@ def catalogue(data, current_mask, radius, width, height):
         if cat_mask[coord] == True:
             pass
         else:
-            init_brightness = data[coord[0], coord[1]]
             obj_mask = create_circular_mask(width, height, coord, radius)
             obj_pts = data*obj_mask #use mask as 1/0 to give only points within range of stars
             cent = np.unravel_index(np.argmax(obj_pts), obj_pts.shape)
@@ -63,5 +62,5 @@ def catalogue(data, current_mask, radius, width, height):
             excl_mask = create_circular_mask(width, height, cent, radius)
             cat_mask = np.logical_or(cat_mask, excl_mask) #exclude points of object from being checked again
 
-    np.savetxt('catalog.csv', catalog, delimiter=',')
+    np.savetxt('points.csv', catalog, delimiter=',')
     return catalog
