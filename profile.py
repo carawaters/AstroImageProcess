@@ -4,19 +4,30 @@ Contains functions for finding the intensity at a range of radii and the Sersic 
 import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import curve_fit
-from photometry import circ_apt_flux
+from photometry import circ_apt_flux, circ_mask, find_max
+
+def find_cent(data, cent):
+    """
+    Finds the true center of the object
+    """
+    mask = circ_mask(data, cent, 12)
+    data_set = data * np.logical_not(mask)
+    new_cent = find_max(data_set)
+    print(new_cent)
+    return new_cent
 
 def int_radius(data, cent, val_min):
     """
     Returns an array of the intensity at different radii out from the centre of an object
     """
-    val = data[cent]
+    val = data[tuple(cent)]
+    print(val)
     rad = 0
     #finding max radius for calculating intensity
     while val >= val_min:
-        #need to make sure we don't include multiple objects
-        #if rad >= 7:
-            #break
+        #need to make sure we don't get infinity
+        if rad >= 20:
+            break
         val = data[cent[0], cent[1]+rad]
         rad += 1
     intensity = []

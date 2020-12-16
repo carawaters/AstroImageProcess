@@ -41,7 +41,7 @@ def bright_mask(data, thresh, val_min, noise_mean, noise_std, width, height):
         print(i)
     return current_mask
 
-def catalogue(data, current_mask, radius, width, height):
+def catalogue(data, current_mask, radius, width, height, fname):
     #Points to use for catalog
     cat_pts = data[np.logical_not(current_mask)] #mask True when excluding so need to remember what we need for current use
     cat_indices = np.nonzero(np.logical_not(current_mask))
@@ -62,5 +62,5 @@ def catalogue(data, current_mask, radius, width, height):
             excl_mask = create_circular_mask(width, height, cent, radius)
             cat_mask = np.logical_or(cat_mask, excl_mask) #exclude points of object from being checked again
 
-    np.savetxt('points.csv', catalog, delimiter=',')
+    np.savetxt(fname, catalog, delimiter=',')
     return catalog

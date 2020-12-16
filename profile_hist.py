@@ -15,7 +15,7 @@ noise_mean = 3419
 noise_std = 12
 val_min = noise_mean + 4 * noise_std
 
-sers = np.loadtxt("sersic_indices.csv", delimiter=',')
+sers = np.loadtxt("sersic_indices_35000.csv", delimiter=',')
 sers = sers[sers <= 20]
 
 #Histogram of sersic indices for all objects possible to calc for

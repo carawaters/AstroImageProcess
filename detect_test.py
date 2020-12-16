@@ -10,7 +10,7 @@ noise_std = 12
 val_min = noise_mean + 4 * noise_std
 val_max = 5400
 radius = 15 #Radius of area seen around point and of mask produced after catalogueing
-thresh = 20000
+thresh = 35000
 
 hdulist = fits.open('A1_mosaic.fits')
 
@@ -24,7 +24,7 @@ width = data.shape[0]
 height = data.shape[1]
 
 current_mask = bright_mask(data, thresh, val_min, noise_mean, noise_std, width, height)
-catalog = catalogue(data, current_mask, radius, width, height)
+catalog = catalogue(data, current_mask, radius, width, height, 'catalog_35000.csv')
 
 plt.figure(1)
 plt.imshow(data, cmap = 'gray', norm=LogNorm())
