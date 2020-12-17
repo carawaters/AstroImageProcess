@@ -31,7 +31,7 @@ height = data.shape[1]
 
 #Mask bright objects and make a catalog
 current_mask = bright_mask(data, thresh, val_min, noise_mean, noise_std, width, height)
-catalog = catalogue(data, current_mask, radius, width, height, 'points_6std.csv')
+catalog = catalogue(data, current_mask, radius, width, height, 'datasets/points_6std.csv')
 
 #Plot of identified objects
 plt.figure(1)

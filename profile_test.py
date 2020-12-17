@@ -20,7 +20,7 @@ noise_std = 12
 val_min = noise_mean + 4 * noise_std
 edge_noise = 100
 
-points = np.genfromtxt('catalog_35000.csv', delimiter=',')
+points = np.genfromtxt('datasets/points_35000.csv', delimiter=',')
 
 sersic_indices = []
 
@@ -43,4 +43,4 @@ for point in points:
                 n, k = sersic_index(intensity)
                 sersic_indices.append(n)
 
-np.savetxt('sersic_indices_35000.csv', np.array(sersic_indices), delimiter=',')
+np.savetxt('datasets/sersic_indices_35000.csv', np.array(sersic_indices), delimiter=',')

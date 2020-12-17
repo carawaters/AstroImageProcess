@@ -39,6 +39,6 @@ plt.xlabel('Pixel Value')
 plt.ylabel('Count')
 plt.legend()
 plt.grid()
-plt.savefig('noise_hist', dpi=300, bbox_inches='tight')
+plt.savefig('images/noise_hist', dpi=300, bbox_inches='tight')
 
 plt.show()
