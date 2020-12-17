@@ -29,9 +29,6 @@ def find_max(data_set):
     """
     if data_set.max() >= 3419+sigma_max*12:
         loc_array = np.where(data_set==data_set.max()) #np.where returns two arrays, each with an index in them
-        #if len(loc_array[0])>2:
-            #return "Multiple max pixels"
-        #else:
         return np.array([int(loc_array[0][0]), int(loc_array[1][0])]) 
     else:
         return False #if there is no source with brightness above the background threshold
