@@ -114,7 +114,7 @@ xerr=np.array(xerr)
 N3=np.array([N2[51],N2[151],N2[251],N2[351],N2[451],N2[551]]) #integer values of m
 popt,pcov=curve_fit(func,m2,np.log10(N2))
 plt.plot(m2_total,func(m2_total,*popt),label="log(N) = ("+str(round(popt[0],3))+"$\pm$"+str(round(np.sqrt(pcov[0][0]),3))+")m"+" + ("+str(round(popt[1],2))+"$\pm$"+str(round(np.sqrt(pcov[1][1]),2))+")") 
-plt.errorbar(m3,np.log10(N3),xerr=xerr,ls="None", capsize=5)
+#plt.errorbar(m3,np.log10(N3),xerr=xerr,ls="None", capsize=5)
 
 plt.xlabel("m")
 plt.ylabel("log(N)")
