@@ -1,7 +1,8 @@
 """
 Masks image to indicate prescence of objects.
+Author: Cara Waters
+Date: 30/11/20
 """
-
 import numpy as np
 from astropy.io import fits
 import matplotlib.pyplot as plt
@@ -9,6 +10,12 @@ from matplotlib.colors import LogNorm
 
 #function to give a circular mask dependent on radius
 def create_circular_mask(width, height, centre, radius):
+    """
+    Creates a circular mask around a point.
+    Inputs: width = width of data set (int), height = height of data set (int), centre = central point (list or tuple length 2),
+            radius = radius of mask to be produced (int)
+    Ouput: mask = boolean 2d numpy array of mask where True = unincluded
+    """
     x, y = np.ogrid[:width, :height]
 
     dist_from_centre = np.sqrt((x - centre[0])**2 + (y - centre[1])**2) #find min distance to check if within radius
@@ -17,11 +24,17 @@ def create_circular_mask(width, height, centre, radius):
     return mask
 
 def bright_mask(data, thresh, val_min, noise_mean, noise_std, width, height):
+    """
+    Masks out bright bleeding objects and adds this mask to the original mask
+    Inputs: data = data set (2d numpy array), thresh = upper threshold for bright object pixels (int),
+            val_min = lower noise limit (int), noise_mean = mean noise value (int), noise_std = noise standard deviation (int),
+            width = width of data set (int), height = height of data set (int)
+    Output: 2d boolean numpy array of new mask where True = unincluded
+    """
     #set up overall mask
     bright_points = data[data >= thresh]
     indices = np.nonzero(data >= thresh)
     current_mask = np.array(data <= val_min, dtype=bool)
-    print(len(bright_points))
 
     bright_min = noise_mean + 2.5 * noise_std
 
@@ -38,10 +51,15 @@ def bright_mask(data, thresh, val_min, noise_mean, noise_std, width, height):
                 j += 1
         circ = create_circular_mask(width, height, coord, j) #mask inside of bright object
         current_mask = np.logical_or(current_mask, circ)
-        print(i)
     return current_mask
 
 def catalogue(data, current_mask, radius, width, height, fname):
+    """
+    Identifies objects in image and catalogs them
+    Inputs: data = data set (2d numpy array), current_mask = boolean mask to use (2d boolean numpy array),
+            radius = radius expected for object to avoid identifying around (int), width = data set width (int),
+            height = data set height (int), fname = file name and path for catalog produced (string)
+    """
     #Points to use for catalog
     cat_pts = data[np.logical_not(current_mask)] #mask True when excluding so need to remember what we need for current use
     cat_indices = np.nonzero(np.logical_not(current_mask))

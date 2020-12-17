@@ -1,16 +1,19 @@
+"""
+Creates a Gaussian profile and fits a Sersic profile to the intensity
+Author: Cara Waters
+Date: 15/12/20
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from numpy import random
 from profile import int_radius, sersic_index, sersic
 
-#x, y = np.meshgrid(np.linspace(0,1,100), np.linspace(0,1,100)) 
-#dist = np.sqrt(x**2+y**2) 
-
 def makeGaussian(amp, sigma, center):
     """
     Makes a symmetric 2D gaussian.
+    Inputs: amp = amplitude multiplier (float), sigma = standard deviation (list length 2), center = central point location (list length 2)
+    Output: array of 2D gaussian values
     """
-
     x = np.arange(0, 100, 1)
     y = x[:,np.newaxis]
     x0 = center[0]

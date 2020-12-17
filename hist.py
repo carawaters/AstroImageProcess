@@ -1,3 +1,8 @@
+"""
+Fits a Gaussian profile to the background of the image
+Author: Cara Waters
+Date: 27/11/20
+"""
 import numpy as np
 from astropy.io import fits
 import matplotlib.pyplot as plt

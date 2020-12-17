@@ -1,3 +1,8 @@
+"""
+Plots a histogram of the Sersic indices calculated
+Author: Cara Waters
+Date: 14/12/20
+"""
 import matplotlib.pyplot as plt
 import numpy as np
 from profile import int_radius, sersic_index, sersic
