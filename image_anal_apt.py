@@ -23,7 +23,7 @@ pointsx, pointsy=np.loadtxt("datasets/points_6std.csv", delimiter=",", unpack = 
 points=[pointsx,pointsy]
 
 
-for k in range(6,21):
+for k in range(6,21,2):
     """
     loops through the variable aperture sizes and plots the curve for each
     """
@@ -91,4 +91,6 @@ plt.xlabel("m")
 plt.ylabel("log(N)")
 plt.legend()
 plt.grid()
+plt.xlim(10,20)
+plt.savefig("images/variable_aperture.png")
 plt.show()
