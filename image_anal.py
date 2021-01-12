@@ -118,7 +118,9 @@ plt.plot(m2_total,func(m2_total,*popt),label="log(N) = ("+str(round(popt[0],3))+
 
 plt.xlabel("m")
 plt.ylabel("log(N)")
+plt.xlim(11,20)
 plt.legend()
 plt.grid()
+plt.savefig("images/logNvsm_linearfit.png")
 plt.show()
 

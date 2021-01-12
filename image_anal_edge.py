@@ -1,6 +1,6 @@
 """
 Maike Lenz, 14/12/2020
-plot the logN vs m function for a range of annulus sizes
+plot the logN vs m function for a range of edge thicknesses
 """
 
 import numpy as np
@@ -23,11 +23,11 @@ pointsx, pointsy=np.loadtxt("datasets/points_6std.csv", delimiter=",", unpack = 
 points=[pointsx,pointsy]
 
 
-for k in range(3,10):
+for k in range(20,200,20):
     """
     loops through the variable aperture sizes and plots the curve for each
     """
-    ann_size= k
+    ann_size= 5
     apt_size = 12 #aperture diameter
 
     #lists which will contain the values in the catalogue
@@ -47,7 +47,7 @@ for k in range(3,10):
         x=int(pointsx[i])
         y=int(pointsy[i])
         #slice a section of the total image around each source to carry out flux analysis. For this, the point cannot lie too close to the edge.
-        if x>100 and y>100 and x<(len(data[0])-100) and y<(len(data)-100): #cuts off edge noise within 100 pixels
+        if x>k and y>k and x<(len(data[0])-k) and y<(len(data)-k): #cuts off edge noise within 100 pixels
             index_y.append(y)
             index_x.append(x)
             data_set = data[int(y-15):int(y+15),int(x-15):int(x+15)]
@@ -84,13 +84,13 @@ for k in range(3,10):
     m=np.arange(0,25,0.01)
     N=np.array(N)
 
-    plt.plot(m,np.log10(N), label = "Annulus = "+str(ann_size))
+    plt.plot(m,np.log10(N), label = "Edge Thickness = "+str(k))
 
 
 plt.xlabel("m")
 plt.ylabel("log(N)")
 plt.legend()
 plt.grid()
-plt.xlim(10,18)
-plt.savefig("images/variable_annulus.png")
+plt.xlim(11,15)
+plt.savefig("images/variable_edge.png")
 plt.show()
